@@ -5,9 +5,9 @@ Die benötigten Schläge werden vom Benutzer eingegeben und durch GPS-Funktion w
 Nach einem gespielten Loch kann man die Anzahl der benötigten Schläge und Putts eingeben.
 Daraus werden nach der Runde verschiedene Statistiken errechnet und können gespeichert und exportiert werden.
 
-Features:	GPS (aktueller Standpunkt)
-		Distanzen berechnen (zu einem ausgewählten Punkt)
-		Scorecard (aktuelle Runde)
-		Liste von gespeicherten Runden
-		Screen für Statistiken
-		Runde als Excel File exportieren
+Features:	GPS (aktueller Standpunkt),
+		Distanzen berechnen (zu einem ausgewählten Punkt), 
+		Scorecard (aktuelle Runde), 
+		Liste von gespeicherten Runden, 
+		Screen für Statistiken, 
+		Runde als Excel File exportieren;
