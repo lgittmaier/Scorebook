@@ -11,3 +11,8 @@ Features:	GPS (aktueller Standpunkt),
 		Liste von gespeicherten Runden, 
 		Screen für Statistiken, 
 		Runde als Excel File exportieren;
+		
+		
+https://docs.google.com/document/d/1U5Biub4hWg_f81R1WXHMcu2jKTAqcBTsiBHXVvkEY5w/edit?usp=sharing
+
+
