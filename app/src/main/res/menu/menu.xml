@@ -12,9 +12,9 @@
         android:title="SETTINGS"
         app:showAsAction="always" />
     <item
-        android:id="@+id/saveToExcel"
+        android:id="@+id/writeToCsv"
         android:icon="@android:drawable/ic_menu_save"
-        android:title="SAVETOXLSX"
+        android:title="WRITETOCSV"
         app:showAsAction="always"/>
 
 </menu>
