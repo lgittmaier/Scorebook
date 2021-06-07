@@ -1,0 +1,2 @@
+rootProject.name = "Scorebook"
+include ':app'
