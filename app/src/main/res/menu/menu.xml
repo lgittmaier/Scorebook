@@ -12,7 +12,7 @@
         android:title="SETTINGS"
         app:showAsAction="always" />
     <item
-        android:id="@+id/writeToCsv"
+        android:id="@+id/writetocsv"
         android:icon="@android:drawable/ic_menu_save"
         android:title="WRITETOCSV"
         app:showAsAction="always"/>
