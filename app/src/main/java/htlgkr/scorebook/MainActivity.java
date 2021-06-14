@@ -22,6 +22,14 @@ public class MainActivity extends AppCompatActivity {
     private LayoutInflater layoutInflater;
     public RoundAdapter roundAdapter;
 
+    static List<Round> rounds = new ArrayList<>();
+    public static List<Round> getRounds() {
+        return rounds;
+    }
+    public static void addRound(Round round) {
+        rounds.add(round);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,8 +39,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void bindViewToAdapter() {
-        List<Round> roundList = new ArrayList<Round>(new HashSet<>(NewRound.getRounds()));
-
+        List<Round> roundList = new ArrayList<>(new HashSet<>(getRounds()));
 
         layoutInflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
         roundAdapter = new RoundAdapter( roundList, layoutInflater);

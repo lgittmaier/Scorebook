@@ -32,7 +32,7 @@
 
 
         <EditText
-            android:id="@+id/dateTime"
+            android:id="@+id/dateAndTime"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_marginBottom="15dp"
@@ -43,7 +43,7 @@
             android:textStyle="italic" />
 
         <EditText
-            android:id="@+id/editTitle"
+            android:id="@+id/golfclub"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_marginBottom="10dp"
@@ -58,7 +58,7 @@
             android:id="@+id/setLocationBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="250dp"
+            android:layout_marginBottom="150dp"
             android:text="set current location" />
 
         <Button

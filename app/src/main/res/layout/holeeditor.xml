@@ -22,42 +22,46 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/newRound"
+            android:id="@+id/holeHeading"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="50dp"
             android:text="Hole: n"
             android:textSize="30sp"
-            android:paddingBottom="15dp"/>
+            android:paddingBottom="15dp"
+            android:textColor="@color/black"/>
 
 
-        <TextView
+        <EditText
             android:id="@+id/parTv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Par"
-            android:ems="10"
-            android:textSize="30sp"
-            android:paddingBottom="15dp"/>
-
-        <TextView
-            android:id="@+id/scoreTv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Score"
-            android:ems="10"
-            android:textSize="30sp"
-            android:paddingBottom="15dp"/>
-
-        <TextView
-            android:id="@+id/puttsTv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Putts"
+            android:hint="Par"
             android:ems="10"
             android:textSize="30sp"
             android:paddingBottom="15dp"
+            android:textColor="@color/black"/>
+
+        <EditText
+            android:id="@+id/scoreTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Score"
+            android:ems="10"
+            android:textSize="30sp"
+            android:paddingBottom="15dp"
+            android:textColor="@color/black"/>
+
+        <EditText
+            android:id="@+id/puttsTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Putts"
+            android:ems="10"
+            android:textSize="30sp"
+            android:paddingBottom="15dp"
+            android:textColor="@color/black"
             />
 
 
@@ -65,26 +69,30 @@
             android:id="@+id/fairwayhitSw"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Fairway hit"
+            android:hint="Fairway hit"
             android:ems="10"
             android:textSize="30sp"
-            android:paddingBottom="15dp"/>
+            android:paddingBottom="15dp"
+            android:textColor="@color/black"/>
 
         <Switch
 
             android:id="@+id/greenhitSw"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Green in Regulation"
-            android:paddingBottom="300dp"
+            android:hint="Green in Regulation"
+            android:paddingBottom="90dp"
             android:ems="10"
-            android:textSize="30sp"/>
+            android:textSize="30sp"
+            android:textColor="@color/black"/>
 
         <Button
             android:id="@+id/nextHoleBtn"
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:text="Next" />
+            android:text="Next"
+
+            />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

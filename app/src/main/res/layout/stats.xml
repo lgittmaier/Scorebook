@@ -25,18 +25,27 @@
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="50dp"
+            android:layout_marginBottom="10dp"
             android:text="Stats"
             android:textSize="30sp" />
+
+        <TextView
+            android:id="@+id/show_stats_gcname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:textSize="30sp"
+            tools:layout_marginBottom="20dp"
+            android:text="GC Name:" />
 
         <TextView
             android:id="@+id/show_stats_address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
+            android:text="Address:"
             android:textSize="30sp"
-            tools:layout_marginBottom="20dp"
-            android:text="Address:" />
+            tools:layout_marginBottom="20dp" />
 
         <TextView
             android:id="@+id/show_stats_date"
@@ -53,8 +62,8 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:textSize="20sp"
-            tools:layout_marginBottom="40dp"
-            android:text="_______________" />
+            tools:layout_marginBottom="20dp"
+            android:text="_____________________" />
 
 
 
