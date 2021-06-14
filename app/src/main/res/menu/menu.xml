@@ -11,16 +11,12 @@
         android:icon="@android:drawable/ic_menu_preferences"
         android:title="SETTINGS"
         app:showAsAction="always" />
+
+
     <item
-<<<<<<< Updated upstream
-        android:id="@+id/writetocsv"
-        android:icon="@android:drawable/ic_menu_save"
-        android:title="WRITETOCSV"
-=======
         android:id="@+id/saveToCSV"
         android:icon="@android:drawable/ic_menu_save"
         android:title="SAVETOCSV"
->>>>>>> Stashed changes
-        app:showAsAction="always"/>
+        app:showAsAction="always" />
 
 </menu>
