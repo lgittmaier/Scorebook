@@ -70,8 +70,9 @@ public class Hole extends AppCompatActivity {
     }
 
     public void clearHole(){
-
-
+        scoreTv.setText("");
+        parTv.setText("");
+        scoreTv.setText("");
     }
 
 
