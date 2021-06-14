@@ -12,10 +12,15 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ListView;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
     public static ListView lv;
     private LayoutInflater layoutInflater;
+    public RoundAdapter roundAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +28,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         lv = findViewById(R.id.playedRounds);
         layoutInflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    }
+
+    public void bindViewToAdapter() {
+        List<Round> roundList = new ArrayList<Round>(new HashSet<>(NewRound.getRounds()));
+
+
+        layoutInflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
+        roundAdapter = new RoundAdapter( roundList, layoutInflater);
+
+        lv.setAdapter(roundAdapter);
     }
 
     //action bar options//////////////////////////////////////////////////////////
