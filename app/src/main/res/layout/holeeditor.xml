@@ -20,104 +20,71 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
         <TextView
-            android:id="@+id/show_stats_stats"
+            android:id="@+id/newRound"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="50dp"
-            android:text="Stats"
-            android:textSize="30sp" />
+            android:text="Hole: n"
+            android:textSize="30sp"
+            android:paddingBottom="15dp"/>
+
 
         <TextView
-            android:id="@+id/show_stats_address"
+            android:id="@+id/parTv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="Par"
             android:ems="10"
             android:textSize="30sp"
-            tools:layout_marginBottom="20dp"
-            android:text="Address:" />
+            android:paddingBottom="15dp"/>
 
         <TextView
-            android:id="@+id/show_stats_date"
+            android:id="@+id/scoreTv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="Score"
             android:ems="10"
             android:textSize="30sp"
-            tools:layout_marginBottom="0dp"
-            android:text="Date:" />
+            android:paddingBottom="15dp"/>
 
         <TextView
-            android:id="@+id/show_stats_strich"
+            android:id="@+id/puttsTv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:textSize="20sp"
-            tools:layout_marginBottom="40dp"
-            android:text="_______________" />
-
-
-
-
-
-        <TextView
-            android:id="@+id/show_stats_par"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:text="Putts"
             android:ems="10"
             android:textSize="30sp"
-            tools:layout_marginBottom="20dp"
-            android:text="Par:" />
+            android:paddingBottom="15dp"
+            />
 
-        <TextView
-            android:id="@+id/show_stats_score"
+
+        <Switch
+            android:id="@+id/fairwayhitSw"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="Fairway hit"
             android:ems="10"
             android:textSize="30sp"
-            tools:layout_marginBottom="20dp"
-            android:text="Score:" />
+            android:paddingBottom="15dp"/>
 
-        <TextView
-            android:id="@+id/show_stats_over"
+        <Switch
+
+            android:id="@+id/greenhitSw"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="Green in Regulation"
+            android:paddingBottom="300dp"
             android:ems="10"
-            android:textSize="30sp"
-            tools:layout_marginBottom="20dp"
-            tools:layout_marginLeft="20dp"
-            android:text="over:" />
+            android:textSize="30sp"/>
 
-
-        <TextView
-            android:id="@+id/show_stats_fairways_hit"
+        <Button
+            android:id="@+id/nextHoleBtn"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:textSize="30sp"
-            tools:layout_marginBottom="20dp"
-            android:text="Fairways hit:" />
-
-
-        <TextView
-            android:id="@+id/show_stats_putts"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:textSize="30sp"
-            tools:layout_marginBottom="20dp"
-            android:text="Putts:" />
-
-
-
-        <TextView
-            android:id="@+id/show_stats_greens_i_r"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:textSize="30sp"
-            tools:layout_marginBottom="20dp"
-            android:text="Greens i.r.:" />
+            android:layout_height="100dp"
+            android:text="Next" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
