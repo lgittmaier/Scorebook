@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,7 +28,13 @@ public class Hole extends AppCompatActivity {
     EditText scoreTv, puttsTv, parTv;
     TextView holeHeading;
     Button nextBtn;
-    NewRound newRound = new NewRound();
+    NewRound newRound;
+    RoundAdapter roundAdapter;
+
+    String dateAndTime;
+    String golfclub;
+    String additionalData;
+    int holes;  // holes to play
 
     int par;
     int score;
@@ -43,7 +50,16 @@ public class Hole extends AppCompatActivity {
 
         layoutInflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
+        newRound = new NewRound();
 
+        try {
+            if (getIntent().getAction().equals("bundleCode")){
+                dateAndTime = getIntent().getExtras().getString("dateAndTime");
+                golfclub = getIntent().getExtras().getString("golfclub");
+                additionalData = getIntent().getExtras().getString("additionalData");
+                holes = Integer.parseInt(getIntent().getExtras().getString("holes"));
+            }
+        }catch (Exception ignored){}
 
         scoreTv = findViewById(R.id.scoreTv);
         puttsTv = findViewById(R.id.puttsTv);
@@ -64,7 +80,7 @@ public class Hole extends AppCompatActivity {
         List<Round> roundList = new ArrayList<>(new HashSet<>(MainActivity.getRounds()));
 
         layoutInflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
-        RoundAdapter roundAdapter = new RoundAdapter(roundList, layoutInflater);
+        roundAdapter = new RoundAdapter(roundList, layoutInflater);
 
         MainActivity.lv.setAdapter(roundAdapter);
     }
@@ -72,7 +88,9 @@ public class Hole extends AppCompatActivity {
     public void clearHole(){
         scoreTv.setText("");
         parTv.setText("");
-        scoreTv.setText("");
+        puttsTv.setText("");
+        greenhitSw.setChecked(false);
+        fairwayhitSw.setChecked(false);
     }
 
 
@@ -101,21 +119,26 @@ public class Hole extends AppCompatActivity {
                     }
 
 
-
-                    if (newRound.holeCounter == 3){
-                        Round round = new Round(newRound.golfclub.toString(), NewRound.additionalData, newRound.dateAndTime.toString(),
+                    if (newRound.holeCounter == holes){ // round finished?
+                        Round round = new Round(
+                                golfclub,
+                                additionalData,
+                                dateAndTime,
                                 par, score, score-par, putts, fairways, gir);
                         MainActivity.addRound(round);
 
                         bindViewToAdapter();
 
-                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        Toast.makeText(getApplicationContext(), "saving round at "+golfclub, Toast.LENGTH_LONG).show();
+
+                        Intent intent = new Intent(getApplicationContext(), MainActivity.class); // back to main screen
                         startActivity(intent);
                     }else{
 
-
+                        clearHole();
 
                         newRound.holeCounter ++;
+                        holeHeading.setText("Hole: "+newRound.holeCounter);
                     }
 
 

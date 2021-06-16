@@ -92,10 +92,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
+            android:text="over/under:"
             android:textSize="30sp"
             tools:layout_marginBottom="20dp"
-            tools:layout_marginLeft="20dp"
-            android:text="over:" />
+            tools:layout_marginLeft="20dp" />
 
 
         <TextView

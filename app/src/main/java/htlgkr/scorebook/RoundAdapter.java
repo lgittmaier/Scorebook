@@ -6,7 +6,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import java.text.ParseException;
 import java.util.List;
 
 public class RoundAdapter extends BaseAdapter {
@@ -15,7 +14,7 @@ public class RoundAdapter extends BaseAdapter {
     LayoutInflater layoutInflater;
     TextView nameTextView;
     TextView dateTextView;
-    TextView scoreTextView;
+    TextView overTextView;
 
     public RoundAdapter(List<Round> rounds, LayoutInflater layoutInflater) {
         this.rounds = rounds;
@@ -50,13 +49,13 @@ public class RoundAdapter extends BaseAdapter {
         }
 
         // sets the fields in the listview
-        nameTextView = view.findViewById(R.id.nameTextView);
-        dateTextView = view.findViewById(R.id.dateTextView);
-        scoreTextView = view.findViewById(R.id.scoreTextView);
+        nameTextView = view.findViewById(R.id.nameField);
+        dateTextView = view.findViewById(R.id.dateField);
+        overTextView = view.findViewById(R.id.overField);
 
         nameTextView.setText(round.getName());
         dateTextView.setText(round.getDate());
-        scoreTextView.setText(round.getScore());
+        overTextView.setText(String.valueOf(round.getOver()));
 
 
         return view;

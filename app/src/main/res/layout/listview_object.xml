@@ -17,11 +17,13 @@
             android:layout_height="30dp">
 
             <TextView
-                android:id="@+id/dateTextView"
+                android:id="@+id/dateField"
                 android:layout_width="300dp"
                 android:layout_height="match_parent"
                 android:text="Date"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:gravity="bottom"/>
         </LinearLayout>
 
         <LinearLayout
@@ -29,18 +31,20 @@
             android:layout_height="40dp">
 
             <TextView
-                android:id="@+id/nameTextView"
+                android:id="@+id/nameField"
                 android:layout_width="300dp"
                 android:layout_height="match_parent"
                 android:text="Name"
-                android:textSize="24sp" />
+                android:textSize="24sp"
+                android:textColor="@color/black"/>
 
             <TextView
-                android:id="@+id/scoreTextView"
+                android:id="@+id/overField"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="Score"
-                android:textSize="24sp" />
+                android:text="over"
+                android:textSize="24sp"
+                android:textColor="@color/black"/>
 
         </LinearLayout>
 

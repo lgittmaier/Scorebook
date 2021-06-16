@@ -14,6 +14,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -42,7 +43,7 @@ public class NewRound extends AppCompatActivity {
     private RoundAdapter roundAdapter;
     public static NotificationManager notificationManager;
     private int notificationId;
-    int holeCounter=1;
+    int holeCounter = 1;
 
 
     static String additionalData; //address & longitude and latitude
@@ -51,7 +52,7 @@ public class NewRound extends AppCompatActivity {
     Calendar tmpCalendar;
 
 
-    EditText dateAndTime, golfclub;
+    EditText dateAndTime, golfclub, holes;
     Button setLocationBtn, startRoundBtn;
 
     @Override
@@ -78,7 +79,9 @@ public class NewRound extends AppCompatActivity {
 
 
         dateAndTime = findViewById(R.id.dateAndTime);
+        dateAndTime.setInputType(EditorInfo.TYPE_NULL);
         golfclub = findViewById(R.id.golfclub);
+        holes = findViewById(R.id.holes);
 
         setLocationBtn = findViewById(R.id.setLocationBtn);
         startRoundBtn = findViewById(R.id.startRoundBtn);
@@ -92,26 +95,7 @@ public class NewRound extends AppCompatActivity {
     }
 
 
-//dateTime//////////////////////////////////////////////////////////////////////////////////////////////
 
-    public void setDateAndTime(EditText dateAndTime) {
-        dateAndTime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDateTimeDialog(dateAndTime);
-            }
-        });
-    }
-
-    public void setLocationButton(Button setLocationBtn) {
-
-        setLocationBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                checkPermissionGPS();
-            }
-        });
-    }
 
     public void setStartRoundBtn(Button startRoundBtn) {
 
@@ -119,7 +103,27 @@ public class NewRound extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), Hole.class);  //starts new Hole
+
+                intent.setAction("bundleCode");
+                Bundle bundle = new Bundle();
+                bundle.putString("dateAndTime", dateAndTime.getText().toString());
+                bundle.putString("golfclub", golfclub.getText().toString());
+                bundle.putString("additionalData", additionalData);
+                bundle.putString("holes", holes.getText().toString());
+
+                intent.putExtras(bundle);   // gives the Hole class these values
                 startActivity(intent);
+            }
+        });
+    }
+
+//dateTime//////////////////////////////////////////////////////////////////////////////////////////////
+
+    public void setDateAndTime(EditText dateAndTime) {
+        dateAndTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDateTimeDialog(dateAndTime);
             }
         });
     }
@@ -156,6 +160,18 @@ public class NewRound extends AppCompatActivity {
 
 
     //location//////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    public void setLocationButton(Button setLocationBtn) {
+
+        setLocationBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkPermissionGPS();
+            }
+        });
+    }
+
     private void checkPermissionGPS() {         // also checks network
         String locationPermission = Manifest.permission.ACCESS_FINE_LOCATION;
         String coarseLocationPermission = Manifest.permission.ACCESS_COARSE_LOCATION;

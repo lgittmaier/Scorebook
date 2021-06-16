@@ -38,4 +38,8 @@ public class Round {
     public int getScore() {
         return score;
     }
+
+    public int getOver() {
+        return over;
+    }
 }
