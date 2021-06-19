@@ -29,8 +29,7 @@
             android:layout_marginBottom="50dp"
             android:text="Hole: n"
             android:textSize="30sp"
-            android:paddingBottom="15dp"
-            android:textColor="@color/black"/>
+            android:paddingBottom="15dp"/>
 
 
         <EditText
@@ -40,8 +39,7 @@
             android:hint="Par"
             android:ems="10"
             android:textSize="30sp"
-            android:paddingBottom="15dp"
-            android:textColor="@color/black"/>
+            android:paddingBottom="15dp"/>
 
         <EditText
             android:id="@+id/scoreTv"
@@ -50,8 +48,7 @@
             android:hint="Score"
             android:ems="10"
             android:textSize="30sp"
-            android:paddingBottom="15dp"
-            android:textColor="@color/black"/>
+            android:paddingBottom="15dp"/>
 
         <EditText
             android:id="@+id/puttsTv"
@@ -60,9 +57,7 @@
             android:hint="Putts"
             android:ems="10"
             android:textSize="30sp"
-            android:paddingBottom="15dp"
-            android:textColor="@color/black"
-            />
+            android:paddingBottom="15dp" />
 
 
         <Switch
@@ -72,8 +67,7 @@
             android:hint="Fairway hit"
             android:ems="10"
             android:textSize="30sp"
-            android:paddingBottom="15dp"
-            android:textColor="@color/black"/>
+            android:paddingBottom="15dp"/>
 
         <Switch
 
@@ -83,16 +77,13 @@
             android:hint="Green in Regulation"
             android:paddingBottom="90dp"
             android:ems="10"
-            android:textSize="30sp"
-            android:textColor="@color/black"/>
+            android:textSize="30sp"/>
 
         <Button
             android:id="@+id/nextHoleBtn"
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:text="Next"
-
-            />
+            android:text="Next" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
