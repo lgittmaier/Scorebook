@@ -1,21 +1,17 @@
 package htlgkr.scorebook;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
-import android.Manifest;
 import android.app.Notification;
-import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -23,40 +19,54 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity  {
 
     public static ListView lv;
     private static LayoutInflater layoutInflater;
     public static RoundAdapter roundAdapter;
 
 
+    public static final String CHANNEL_ID = "notification_channel1";
+    public static List<Integer> notifications = new ArrayList<>();
+    private NotificationManager notificationManager;
+    private int notificationId = 99;
+    public static boolean notificationAllowed;
+
+    private final static String TAG = "MainActivity";
+    public final static String PREFS = "PrefsFile";
+
+    private SharedPreferences settings = null;
+    private SharedPreferences.Editor editor = null;
+
     private SharedPreferences prefs1;
     private SharedPreferences prefs2;
     private SharedPreferences prefs3;
     private SharedPreferences.OnSharedPreferenceChangeListener preferencesChangeListener1;
     private SharedPreferences.OnSharedPreferenceChangeListener preferencesChangeListener2;
-    private SharedPreferences.OnSharedPreferenceChangeListener preferencesChangeListener3;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         lv = findViewById(R.id.playedRounds);
         layoutInflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        bindViewToAdapter();
+
+
+
+
 
 
         // preferences
@@ -65,11 +75,21 @@ public class MainActivity extends AppCompatActivity {
         preferenceChanged(prefs1, "darkmode");
         preferenceChanged(prefs2, "allowNotifications");
         preferencesChangeListener1 = (SharedPreferences, key) -> preferenceChanged(prefs1, "darkmode");
-
         preferencesChangeListener2 = (SharedPreferences, key) -> preferenceChanged(prefs2, "allowNotifications");
         prefs1.registerOnSharedPreferenceChangeListener(preferencesChangeListener1);
+        prefs2.registerOnSharedPreferenceChangeListener(preferencesChangeListener2);
 
-        prefs2.registerOnSharedPreferenceChangeListener(preferencesChangeListener3);
+
+
+
+
+
+
+
+
+
+
+
 
         // register the context menu
         registerForContextMenu(lv);
@@ -77,6 +97,12 @@ public class MainActivity extends AppCompatActivity {
 
         bindViewToAdapter();
     }
+
+
+
+
+
+
 
     public void bindViewToAdapter() {
         List<Round> roundList = new ArrayList<>(new HashSet<>(getRounds()));
@@ -134,6 +160,8 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
+
     //preferences////////////////////////////////////////////////////////////////////////////////////////
     private void preferenceChanged(SharedPreferences prefs, String key) {
         Map<String, ?> allEntries = prefs.getAll();
@@ -161,16 +189,18 @@ public class MainActivity extends AppCompatActivity {
                 sValue = String.valueOf(prefs.getBoolean(key, false));
             }
 
-         /*   if (sValue.equals("true")) {
+            if (sValue.equals("true")) {
+
                 notificationAllowed = true;
             } else {
-                notificationManager.cancelAll();
+
                 notificationAllowed = false;
             }
 
-          */
+
         }
     }
+
 
 
 }

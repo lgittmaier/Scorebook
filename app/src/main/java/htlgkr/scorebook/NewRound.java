@@ -3,16 +3,25 @@ package htlgkr.scorebook;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
+import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
@@ -23,6 +32,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 
 import org.json.JSONException;
@@ -32,24 +42,38 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 
 public class NewRound extends AppCompatActivity {
     private LayoutInflater layoutInflater;
 
     private Boolean isGpsAllowed = false;
 
+    private MainActivity mainActivity;
+
     private LocationManager locationManager;
     private LocationListener locationListener;
     private RoundAdapter roundAdapter;
     public static NotificationManager notificationManager;
-    private int notificationId;
+
     int holeCounter = 1;
 
+
+    public static final String CHANNEL_ID = "notification_channel1";
+    public static List<Integer> notifications = new ArrayList<>();
+
+    private int notificationId = 99;
+    public static boolean notificationAllowed;
+
+    private Button startNewRoundButton;
 
     static String additionalData; //address & longitude and latitude
 
     public static final int RQ_ACCESS_PERMISSIONS = 123;
     Calendar tmpCalendar;
+
+
+
 
 
     EditText dateAndTime, golfclub, holes;
@@ -73,9 +97,21 @@ public class NewRound extends AppCompatActivity {
         setContentView(R.layout.newround);
 
         layoutInflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
+        startNewRoundButton = findViewById(R.id.startRoundBtn_newRound);
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);      // sets the back button
+
+        // notification
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "notificationChannel";
+            String description = "notificationDescription";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+
+            notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
 
 
         dateAndTime = findViewById(R.id.dateAndTime);
@@ -84,7 +120,7 @@ public class NewRound extends AppCompatActivity {
         holes = findViewById(R.id.holes);
 
         setLocationBtn = findViewById(R.id.setLocationBtn);
-        startRoundBtn = findViewById(R.id.startRoundBtn);
+        startRoundBtn = findViewById(R.id.startRoundBtn_newRound);
 
 
         // onClickListeners
@@ -94,6 +130,28 @@ public class NewRound extends AppCompatActivity {
 
     }
 
+    //notification///////////////////////////////////////////////////////////////////////////////////////
+   public void newRoundstarted() {
+
+
+        if (notificationAllowed = true) {
+            android.app.Notification notification = new Notification.Builder(this, MainActivity.CHANNEL_ID)
+                    .setSmallIcon(android.R.drawable.ic_dialog_info)
+                    .setColor(Color.YELLOW)
+                    .setContentTitle("A new round has started!")
+                    .setContentText("You can now document your round." )
+                    .setWhen(System.currentTimeMillis())
+                    .setAutoCancel(true)
+                    .setGroup("notificationGroup")
+                    .build();
+            notificationManager.notify(notificationId, notification);
+        }
+        else {
+
+
+
+        }
+    }
 
 
 
@@ -102,6 +160,7 @@ public class NewRound extends AppCompatActivity {
         startRoundBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent intent = new Intent(getApplicationContext(), Hole.class);  //starts new Hole
 
                 intent.setAction("bundleCode");
@@ -113,7 +172,15 @@ public class NewRound extends AppCompatActivity {
 
                 intent.putExtras(bundle);   // gives the Hole class these values
                 startActivity(intent);
+
+                newRoundstarted();
+
+
+
             }
+
+
+
         });
     }
 
@@ -255,4 +322,14 @@ public class NewRound extends AppCompatActivity {
 
         }
     }
+
+
+
+
+
+
+
+
+
+
 }
