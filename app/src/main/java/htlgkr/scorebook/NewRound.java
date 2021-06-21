@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +23,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
@@ -75,7 +77,6 @@ public class NewRound extends AppCompatActivity implements OnDataReadyListener {
         setContentView(R.layout.newround);
 
         layoutInflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        startNewRoundButton = findViewById(R.id.startRoundBtn_newRound);
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);      // sets the back button
 
@@ -87,6 +88,7 @@ public class NewRound extends AppCompatActivity implements OnDataReadyListener {
 
         setLocationBtn = findViewById(R.id.setLocationBtn);
         startRoundBtn = findViewById(R.id.startRoundBtn_newRound);
+        startRoundBtn.setEnabled(false);
 
 
         // onClickListeners
@@ -103,22 +105,29 @@ public class NewRound extends AppCompatActivity implements OnDataReadyListener {
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(getApplicationContext(), Hole.class);  //starts new Hole
+                if (!(dateAndTime.getText().toString().equals("") || golfclub.getText().toString().equals("") || holes.getText().toString().equals(""))) {
 
-                intent.setAction("bundleCode");
-                Bundle bundle = new Bundle();
-                bundle.putString("dateAndTime", dateAndTime.getText().toString());
-                bundle.putString("golfclub", golfclub.getText().toString());
-                bundle.putString("additionalData", additionalData);
-                bundle.putString("holes", holes.getText().toString());
 
-                intent.putExtras(bundle);   // gives the Hole class these values
-                startActivity(intent);
+                    Intent intent = new Intent(getApplicationContext(), Hole.class);  //starts new Hole
+
+                    intent.setAction("bundleCode");
+                    Bundle bundle = new Bundle();
+                    bundle.putString("dateAndTime", dateAndTime.getText().toString());
+                    bundle.putString("golfclub", golfclub.getText().toString());
+                    bundle.putString("additionalData", additionalData);
+                    bundle.putString("holes", holes.getText().toString());
+
+                    intent.putExtras(bundle);   // gives the Hole class these values
+                    startActivity(intent);
+                }else{
+                    Toast.makeText(getApplicationContext(), "fill all fields!",Toast.LENGTH_LONG).show();
+                }
+
             }
         });
     }
 
-//dateTime//////////////////////////////////////////////////////////////////////////////////////////////
+    //dateTime//////////////////////////////////////////////////////////////////////////////////////////////
 
     public void setDateAndTime(EditText dateAndTime) {
         dateAndTime.setOnClickListener(new View.OnClickListener() {
@@ -162,14 +171,11 @@ public class NewRound extends AppCompatActivity implements OnDataReadyListener {
 
     //location//////////////////////////////////////////////////////////////////////////////////////////////
 
-
     public void setLocationButton(Button setLocationBtn) {
 
         setLocationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 checkPermissionGPS();
             }
         });
@@ -180,33 +186,39 @@ public class NewRound extends AppCompatActivity implements OnDataReadyListener {
         String coarseLocationPermission = Manifest.permission.ACCESS_COARSE_LOCATION;
         String networkPermission = Manifest.permission.ACCESS_NETWORK_STATE;
 
-        if (ActivityCompat.checkSelfPermission(this, locationPermission)
-                != PackageManager.PERMISSION_GRANTED) {
+        //if (ActivityCompat.checkSelfPermission(this, locationPermission)
+        //      != PackageManager.PERMISSION_GRANTED) {
 
-            ActivityCompat.requestPermissions(this, new String[]{locationPermission, networkPermission, coarseLocationPermission}, RQ_ACCESS_PERMISSIONS);
-        } else {
+        ActivityCompat.requestPermissions(this, new String[]{locationPermission, networkPermission, coarseLocationPermission}, RQ_ACCESS_PERMISSIONS);
+        //} else {
 
-            progressBar = findViewById(R.id.progressbar);  //specify here Root layout Id
+        gpsGranted();
 
-            progressBar.setVisibility(View.VISIBLE); //TODO if data provided then set invisible
-
-            gpsGranted();
-
-        }
+        //}
     }
 
+    @SuppressLint("MissingPermission")
     private void gpsGranted() {
 
         isGpsAllowed = true;
         OnDataReadyListener listener = this;
 
+        progressBar = findViewById(R.id.progressbar);  //Progress bar under the setLocation Button
+        progressBar.setMin(1);
+        progressBar.setMax(100);
+        progressBar.setVisibility(View.VISIBLE);
+        progressBar.setProgress(15);
+
+
         locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(@NonNull Location location) {
+                progressBar.setProgress(40);
                 MyThread myThread = new MyThread(location, listener);     // does the GET-Request
                 myThread.start();
             }
         };
+
     }
 
     @Override
@@ -230,7 +242,7 @@ public class NewRound extends AppCompatActivity implements OnDataReadyListener {
     }
 
 
-    public static void readJson(StringBuilder content) {        // fills field additionalData  /  gets called by MyThread
+    public void readJson(StringBuilder content) {        // fills field additionalData  /  gets called by MyThread
 
 
         JSONObject jsonObject = null;
@@ -247,6 +259,8 @@ public class NewRound extends AppCompatActivity implements OnDataReadyListener {
         String displayName = "";
         String[] splittedDisplayName;
 
+        progressBar.setProgress(75);
+
 
         if (jsonObject != null) {
             try {
@@ -255,22 +269,33 @@ public class NewRound extends AppCompatActivity implements OnDataReadyListener {
 
                 houseNumber = splittedDisplayName[0].trim();
                 street = splittedDisplayName[1].trim();
-                city = splittedDisplayName[3].trim();
+                city = splittedDisplayName[4].trim();
 
 
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
+            additionalData = street + " " + houseNumber + ", " + city;// format: street houseNumber, city
 
-            additionalData = street + " " + houseNumber + ", " + city;// format: street houseNumber; postcode city; country; \n lat: latitude  lon: longitude
+            progressBar.setVisibility(View.INVISIBLE);
 
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+                    startRoundBtn.setEnabled(true);
+
+                }
+            });
         }
     }
 
 
     @Override
     public void onReady(StringBuilder content) {
+        progressBar.setProgress(60);
         readJson(content);
     }
 }

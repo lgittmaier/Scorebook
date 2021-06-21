@@ -70,7 +70,6 @@
             android:id="@+id/setLocationBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="120dp"
             android:text="set current location" />
 
 
@@ -78,6 +77,7 @@
             android:id="@+id/progressbar"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
+            android:layout_marginBottom="120dp"
             android:layout_height="wrap_content" />
 
         <Button

@@ -12,47 +12,48 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:text="Stats"
-        android:textSize="30sp" />
+        android:layout_marginBottom="30dp"
+        android:text="Statistics"
+        android:textAlignment="center"
+        android:textStyle="bold"
+
+        android:textSize="35sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp">
 
         <TextView
             android:id="@+id/show_stats_gcname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
             android:text="GC Name: "
-            android:textSize="30sp"
-            tools:layout_marginBottom="20dp" />
+            android:textSize="35sp"
+            tools:layout_marginBottom="30dp" />
 
         <TextView
             android:id="@+id/show_stats_address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
             android:text="Address: "
-            android:textSize="30sp"
-            tools:layout_marginBottom="20dp" />
+            android:textSize="27sp"
+            tools:layout_marginBottom="35dp" />
 
         <TextView
             android:id="@+id/show_stats_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
             android:text="Date: "
-            android:textSize="30sp"
-            tools:layout_marginBottom="0dp" />
+            android:textSize="27sp"
+            tools:layout_marginBottom="20dp" />
 
         <TextView
             android:id="@+id/show_stats_strich"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
             android:text="______________________________"
             android:textSize="20sp"
             tools:layout_marginBottom="20dp" />
@@ -62,27 +63,24 @@
             android:id="@+id/show_stats_par"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:text="Par: "
-            android:textSize="30sp"
+            android:text="Par:                 "
+            android:textSize="32sp"
             tools:layout_marginBottom="20dp" />
 
         <TextView
             android:id="@+id/show_stats_score"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:text="Score: "
-            android:textSize="30sp"
+            android:text="Score:             "
+            android:textSize="32sp"
             tools:layout_marginBottom="20dp" />
 
         <TextView
             android:id="@+id/show_stats_over"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:text="over/under: "
-            android:textSize="30sp"
+            android:text="over/under:   "
+            android:textSize="32sp"
             tools:layout_marginBottom="20dp"
             tools:layout_marginLeft="20dp" />
 
@@ -91,9 +89,8 @@
             android:id="@+id/show_stats_fairways_hit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:text="Fairways hit: "
-            android:textSize="30sp"
+            android:text="Fairways hit:  "
+            android:textSize="32sp"
             tools:layout_marginBottom="20dp" />
 
 
@@ -101,9 +98,8 @@
             android:id="@+id/show_stats_putts"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:text="Putts: "
-            android:textSize="30sp"
+            android:text="Putts:              "
+            android:textSize="32sp"
             tools:layout_marginBottom="20dp" />
 
 
@@ -111,9 +107,8 @@
             android:id="@+id/show_stats_greens_i_r"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:text="Greens i.r.: "
-            android:textSize="30sp" />
+            android:text="Greens i.r.:      "
+            android:textSize="32sp" />
 
     </LinearLayout>
 
