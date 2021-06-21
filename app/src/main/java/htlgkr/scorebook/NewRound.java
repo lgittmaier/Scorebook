@@ -54,16 +54,8 @@ public class NewRound extends AppCompatActivity {
     private LocationManager locationManager;
     private LocationListener locationListener;
     private RoundAdapter roundAdapter;
-    public static NotificationManager notificationManager;
-
     int holeCounter = 1;
 
-
-    public static final String CHANNEL_ID = "notification_channel1";
-    public static List<Integer> notifications = new ArrayList<>();
-
-    private int notificationId = 99;
-    public static boolean notificationAllowed;
 
     private Button startNewRoundButton;
 
@@ -71,9 +63,6 @@ public class NewRound extends AppCompatActivity {
 
     public static final int RQ_ACCESS_PERMISSIONS = 123;
     Calendar tmpCalendar;
-
-
-
 
 
     EditText dateAndTime, golfclub, holes;
@@ -101,17 +90,7 @@ public class NewRound extends AppCompatActivity {
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);      // sets the back button
 
-        // notification
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = "notificationChannel";
-            String description = "notificationDescription";
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
-            channel.setDescription(description);
 
-            notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-        }
 
 
         dateAndTime = findViewById(R.id.dateAndTime);
@@ -130,28 +109,6 @@ public class NewRound extends AppCompatActivity {
 
     }
 
-    //notification///////////////////////////////////////////////////////////////////////////////////////
-   public void newRoundstarted() {
-
-
-        if (notificationAllowed = true) {
-            android.app.Notification notification = new Notification.Builder(this, MainActivity.CHANNEL_ID)
-                    .setSmallIcon(android.R.drawable.ic_dialog_info)
-                    .setColor(Color.YELLOW)
-                    .setContentTitle("A new round has started!")
-                    .setContentText("You can now document your round." )
-                    .setWhen(System.currentTimeMillis())
-                    .setAutoCancel(true)
-                    .setGroup("notificationGroup")
-                    .build();
-            notificationManager.notify(notificationId, notification);
-        }
-        else {
-
-
-
-        }
-    }
 
 
 
@@ -173,12 +130,8 @@ public class NewRound extends AppCompatActivity {
                 intent.putExtras(bundle);   // gives the Hole class these values
                 startActivity(intent);
 
-                newRoundstarted();
-
-
 
             }
-
 
 
         });
@@ -322,14 +275,6 @@ public class NewRound extends AppCompatActivity {
 
         }
     }
-
-
-
-
-
-
-
-
 
 
 }
