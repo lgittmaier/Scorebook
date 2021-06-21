@@ -1,6 +1,8 @@
 package htlgkr.scorebook;
 
-public class Round {
+import java.util.Comparator;
+
+public class Round  {
     String name;        //name of the golf club
     String address;     //address when Button setAddress was hit
     String date;        //format: dd-MM-yyyy HH:mm
@@ -62,4 +64,34 @@ public class Round {
     public int getGir() {
         return gir;
     }
+
+
+
+    static class SortByDate implements Comparator<Round> {
+
+
+        @Override
+        public int compare(Round o1, Round o2) {
+            return o2.getDate().compareTo(o1.getDate());
+        }
+    }
+
+
+
+    /*@Override
+    public int compareTo(Round o) {
+        return getDate().compareTo(o.getDate());
+    }
+
+     */
+/*
+    @Override
+    public int compare(Round o1, Round o2) {
+        return o1.getDate().compareTo(o2.getDate());
+    }
+
+ */
 }
+
+
+

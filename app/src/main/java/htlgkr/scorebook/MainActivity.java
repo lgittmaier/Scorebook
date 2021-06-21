@@ -5,13 +5,20 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
+import android.Manifest;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,20 +30,38 @@ import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity implements NumberPicker.OnValueChangeListener{
+public class MainActivity extends AppCompatActivity implements NumberPicker.OnValueChangeListener {
 
     public static ListView lv;
     private static LayoutInflater layoutInflater;
     public static RoundAdapter roundAdapter;
+    private final int RQ_WRITE_SDCARD = 45;
+    private static final int RQ_WRITE_STORAGE = 12345;
+
+    public static final int RQ_ACCESS_PERMISSIONS = 123;
+
+
+    private final String sdCardFilename = "SDCardGolfrunden";
+    public static String json;
+    public static Gson gson = new Gson();
 
 
     public static final String CHANNEL_ID = "notification_channel1";
@@ -45,8 +70,6 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
     private int notificationId = 99;
     public static boolean notificationAllowed;
 
-    private final static String TAG = "MainActivity";
-    public final static String PREFS = "PrefsFile";
 
     public Bundle statsBundle;
 
@@ -68,6 +91,19 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
         lv = findViewById(R.id.playedRounds);
         layoutInflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
+        // notification
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = getString(R.string.channel_name);
+            String description = getString(R.string.channel_description);
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+
+            notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+
+
         loadRoundsFromCSV(); // loads rounds from the csv file
 
         // preferences
@@ -83,13 +119,14 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
 
         // register the context menu
         registerForContextMenu(lv);
+
         bindViewToAdapter();
     }
 
 
     public void bindViewToAdapter() {
         List<Round> roundList = new ArrayList<>(new HashSet<>(getRounds()));
-
+        Collections.sort(roundList, new Round.SortByDate());
         layoutInflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
         roundAdapter = new RoundAdapter(roundList, layoutInflater);
 
@@ -162,11 +199,79 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
 
 
             Toast.makeText(this, "show settings", Toast.LENGTH_SHORT).show();
+        } else if (item.getItemId() == R.id.saveToCSV) {
+
+            if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, RQ_WRITE_SDCARD);
+            } else {
+
+                final ProgressDialog dialog = ProgressDialog.show(this, "save to external storage", "saving", false);
+                new Thread(() -> {
+                    writeToSDCard(rounds);
+                    dialog.dismiss();
+                }).start();
+            }
+
+
+        } else if (item.getItemId() == R.id.clearNotes) {
+
+            clearRound();
+
+            writeRoundToCSV(rounds);
+
+            bindViewToAdapter();
+
+            Toast.makeText(this, "clear", Toast.LENGTH_SHORT).show();
         }
 
-
         return super.onOptionsItemSelected(item);
+    }
 
+    //SD-card/////////////////////////////////////////////////////////////////////////
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {     // write external storage permission
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == RQ_WRITE_SDCARD) {
+            if (grantResults.length > 0 && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "permission forbidden", Toast.LENGTH_SHORT).show();
+            } else {
+                writeToSDCard(rounds);
+            }
+        }
+    }
+
+    public void writeToSDCard(List<Round> roundList) {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        String state = Environment.getExternalStorageState();
+
+        //create the path
+        if (!state.equals(Environment.MEDIA_MOUNTED)) return;
+        File outputFile = getExternalFilesDir(null);
+        String path = outputFile.getAbsolutePath();
+        String fullPath = path + File.separator + sdCardFilename;
+        File sdCardNotesFile = new File(fullPath);
+
+        // to Json
+        json = gson.toJson(roundList);
+
+        Log.d("TAG", "filename: " + fullPath);
+        try {
+            PrintWriter pw = new PrintWriter(
+                    new OutputStreamWriter(new FileOutputStream(sdCardNotesFile)));
+
+            pw.write(json);
+
+            pw.flush();
+            pw.close();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -200,7 +305,7 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
 
                 notificationAllowed = true;
             } else {
-
+                notificationManager.cancelAll();
                 notificationAllowed = false;
             }
 
@@ -235,7 +340,7 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
                 bundle.putString("date", currentRound.getDate());
                 bundle.putString("par", String.valueOf(currentRound.getPar()));
                 bundle.putString("score", String.valueOf(currentRound.getScore()));
-                bundle.putString("over", String.valueOf(currentRound.getScore()-currentRound.getPar()));
+                bundle.putString("over", String.valueOf(currentRound.getScore() - currentRound.getPar()));
                 bundle.putString("putts", String.valueOf(currentRound.getPutts()));
                 bundle.putString("fairway", String.valueOf(currentRound.getFairway()));
                 bundle.putString("gir", String.valueOf(currentRound.getGir()));
@@ -256,7 +361,7 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
                 rounds.remove(currentRound);
 
                 AlertDialog.Builder alert = new AlertDialog.Builder(this);
-                alert.setTitle("Round at " + currentRound.getName()+ " on "+ currentRound.getDate() + " deleted !");
+                alert.setTitle("Round at " + currentRound.getName() + " on " + currentRound.getDate() + " deleted !");
                 alert.setNegativeButton("ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -266,10 +371,37 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
                 alert.show();
 
             }
+
+            writeRoundToCSV(rounds);
+
             bindViewToAdapter();
             return true;
         }
         return super.onContextItemSelected(item);
+    }
+
+    public void writeRoundToCSV(List<Round> roundList) {        //writes into CSV-File
+
+        try {
+            FileOutputStream fos = openFileOutput(Hole.filename, MODE_PRIVATE);
+            PrintWriter out = new PrintWriter(new OutputStreamWriter(fos));
+            for (int i = 0; i < roundList.size(); i++) {
+                out.println(roundList.get(i).getName() + ";"
+                        + roundList.get(i).getAddress() + ";"
+                        + roundList.get(i).getDate() + ";"
+                        + roundList.get(i).getPar() + ";"
+                        + roundList.get(i).getScore() + ";"
+                        + roundList.get(i).getOver() + ";"
+                        + roundList.get(i).getPutts() + ";"
+                        + roundList.get(i).getFairway() + ";"
+                        + roundList.get(i).getGir());
+            }
+            out.flush();
+            out.close();
+        } catch (FileNotFoundException exp) {
+            Log.d("TAG", exp.getStackTrace().toString());
+        }
+
     }
 
 
@@ -277,4 +409,10 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
     public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
 
     }
+
+
+    public static void clearRound() {
+        rounds.clear();
+    }
+
 }

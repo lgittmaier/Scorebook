@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class RoundAdapter extends BaseAdapter {
+public class RoundAdapter extends BaseAdapter{
 
     public List<Round> rounds;
     LayoutInflater layoutInflater;
@@ -60,4 +60,6 @@ public class RoundAdapter extends BaseAdapter {
 
         return view;
     }
+
+
 }
