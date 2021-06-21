@@ -9,7 +9,7 @@ Features:	GPS (aktueller Standpunkt),
 		Scorecard (aktuelle Runde), 
 		Liste von gespeicherten Runden, 
 		Screen für Statistiken, 
-		Runde als Excel File exportieren;
+		Runde als Excel CSV File speichern;
 		
 		
 https://docs.google.com/document/d/1U5Biub4hWg_f81R1WXHMcu2jKTAqcBTsiBHXVvkEY5w/edit?usp=sharing
