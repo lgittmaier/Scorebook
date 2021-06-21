@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -20,6 +21,10 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -28,6 +33,8 @@ import java.util.List;
 public class Hole extends AppCompatActivity {
 
     private LayoutInflater layoutInflater;
+
+    public static final String filename = "rounds01.csv";
 
     Switch greenhitSw, fairwayhitSw;
     EditText scoreTv, puttsTv, parTv;
@@ -50,7 +57,6 @@ public class Hole extends AppCompatActivity {
 
     public static NotificationManager notificationManager;
     public static final String CHANNEL_ID = "notification_channel1";
-    public static List<Integer> notifications = new ArrayList<>();
 
     private int notificationId = 99;
     public static boolean notificationAllowed;
@@ -118,6 +124,30 @@ public class Hole extends AppCompatActivity {
         fairwayhitSw.setChecked(false);
     }
 
+    public void writeRoundToCSV(List<Round> roundList) {        //writes into CSV-File
+
+        try {
+            FileOutputStream fos = openFileOutput(filename, MODE_PRIVATE);
+            PrintWriter out = new PrintWriter(new OutputStreamWriter(fos));
+            for (int i = 0; i < roundList.size(); i++) {
+                out.println(roundList.get(i).getName()+";"
+                        +roundList.get(i).getAddress()+";"
+                        +roundList.get(i).getDate()+";"
+                        +roundList.get(i).getPar()+";"
+                        +roundList.get(i).getScore()+";"
+                        +roundList.get(i).getOver()+";"
+                        +roundList.get(i).getPutts()+";"
+                        +roundList.get(i).getFairway()+";"
+                        +roundList.get(i).getGir());
+            }
+            out.flush();
+            out.close();
+        } catch (FileNotFoundException exp) {
+            Log.d("TAG", exp.getStackTrace().toString());
+        }
+
+    }
+
 
 
     public void setUpNextBtn(Button nextBtn) {
@@ -151,6 +181,8 @@ public class Hole extends AppCompatActivity {
                                 dateAndTime,
                                 par, score, score-par, putts, fairways, gir);
                         MainActivity.addRound(round);
+
+                        writeRoundToCSV(MainActivity.getRounds());
 
                         bindViewToAdapter();
 

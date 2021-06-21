@@ -3,33 +3,30 @@ package htlgkr.scorebook;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity  {
+public class MainActivity extends AppCompatActivity {
 
     public static ListView lv;
     private static LayoutInflater layoutInflater;
@@ -63,11 +60,7 @@ public class MainActivity extends AppCompatActivity  {
         lv = findViewById(R.id.playedRounds);
         layoutInflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-
-
-
-
-
+        loadRoundsFromCSV(); // loads rounds from the csv file
 
         // preferences
         prefs1 = PreferenceManager.getDefaultSharedPreferences(this);
@@ -80,28 +73,12 @@ public class MainActivity extends AppCompatActivity  {
         prefs2.registerOnSharedPreferenceChangeListener(preferencesChangeListener2);
 
 
-
-
-
-
-
-
-
-
-
-
-
         // register the context menu
         registerForContextMenu(lv);
 
 
         bindViewToAdapter();
     }
-
-
-
-
-
 
 
     public void bindViewToAdapter() {
@@ -111,6 +88,38 @@ public class MainActivity extends AppCompatActivity  {
         roundAdapter = new RoundAdapter(roundList, layoutInflater);
 
         lv.setAdapter(roundAdapter);
+    }
+
+    public void loadRoundsFromCSV() {
+        rounds.clear();
+        List<Round> toDos = new ArrayList<>();
+        try {
+            FileInputStream fis = openFileInput(Hole.filename);
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(fis));
+            String line;
+
+            while ((line = in.readLine()) != null) {
+                String[] tmp = line.split(";");
+                Round r = null;
+
+
+                if (tmp[0] == null || tmp[0].equals("") || tmp[0].equals(" ") || tmp[1] == null || tmp[1].equals("") || tmp[1].equals(" ")) {
+
+                } else {
+                    r = new Round(tmp[0], tmp[1], tmp[2], Integer.parseInt(tmp[3]), Integer.parseInt(tmp[4]),
+                            Integer.parseInt(tmp[5]), Integer.parseInt(tmp[6]), Integer.parseInt(tmp[7]), Integer.parseInt(tmp[8]));
+                    addRound(r);
+                }
+
+
+            }
+            in.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     static List<Round> rounds = new ArrayList<>();
@@ -140,8 +149,7 @@ public class MainActivity extends AppCompatActivity  {
 
 
             Toast.makeText(this, "add Round", Toast.LENGTH_SHORT).show();
-        }
-        else if (item.getItemId() == R.id.menu_preferences) {
+        } else if (item.getItemId() == R.id.menu_preferences) {
 
             Intent intent = new Intent(this, Settings.class);  //starts Settings
             startActivity(intent);
@@ -151,15 +159,9 @@ public class MainActivity extends AppCompatActivity  {
         }
 
 
-
         return super.onOptionsItemSelected(item);
 
     }
-
-
-
-
-
 
 
     //preferences////////////////////////////////////////////////////////////////////////////////////////
@@ -181,7 +183,6 @@ public class MainActivity extends AppCompatActivity  {
             }
 
 
-
         } else if (key.equals("allowNotifications")) {
             if (allEntries.get(key) instanceof String) {
                 sValue = prefs.getString(key, "");
@@ -200,7 +201,6 @@ public class MainActivity extends AppCompatActivity  {
 
         }
     }
-
 
 
 }

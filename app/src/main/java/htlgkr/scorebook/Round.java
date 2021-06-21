@@ -25,7 +25,7 @@ public class Round {
 
     public String getName() {
         return name;
-    }
+    }  // name of the golfclub
 
     public void setName(String name) {
         this.name = name;
@@ -41,5 +41,25 @@ public class Round {
 
     public int getOver() {
         return over;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public int getPar() {
+        return par;
+    }
+
+    public int getPutts() {
+        return putts;
+    }
+
+    public int getFairway() {
+        return fairway;
+    }
+
+    public int getGir() {
+        return gir;
     }
 }
