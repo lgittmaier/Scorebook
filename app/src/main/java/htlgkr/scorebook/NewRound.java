@@ -3,53 +3,42 @@ package htlgkr.scorebook;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
-import java.util.Map;
 
-public class NewRound extends AppCompatActivity {
+public class NewRound extends AppCompatActivity implements OnDataReadyListener {
     private LayoutInflater layoutInflater;
 
     private Boolean isGpsAllowed = false;
 
     private MainActivity mainActivity;
+
+    ProgressBar progressBar;
 
     private LocationManager locationManager;
     private LocationListener locationListener;
@@ -91,8 +80,6 @@ public class NewRound extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);      // sets the back button
 
 
-
-
         dateAndTime = findViewById(R.id.dateAndTime);
         dateAndTime.setInputType(EditorInfo.TYPE_NULL);
         golfclub = findViewById(R.id.golfclub);
@@ -108,8 +95,6 @@ public class NewRound extends AppCompatActivity {
         setLocationButton(setLocationBtn);
 
     }
-
-
 
 
     public void setStartRoundBtn(Button startRoundBtn) {
@@ -129,11 +114,7 @@ public class NewRound extends AppCompatActivity {
 
                 intent.putExtras(bundle);   // gives the Hole class these values
                 startActivity(intent);
-
-
             }
-
-
         });
     }
 
@@ -187,6 +168,8 @@ public class NewRound extends AppCompatActivity {
         setLocationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
                 checkPermissionGPS();
             }
         });
@@ -202,18 +185,25 @@ public class NewRound extends AppCompatActivity {
 
             ActivityCompat.requestPermissions(this, new String[]{locationPermission, networkPermission, coarseLocationPermission}, RQ_ACCESS_PERMISSIONS);
         } else {
+
+            progressBar = findViewById(R.id.progressbar);  //specify here Root layout Id
+
+            progressBar.setVisibility(View.VISIBLE); //TODO if data provided then set invisible
+
             gpsGranted();
+
         }
     }
 
     private void gpsGranted() {
 
         isGpsAllowed = true;
+        OnDataReadyListener listener = this;
 
         locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(@NonNull Location location) {
-                MyThread myThread = new MyThread(location);     // does the GET-Request
+                MyThread myThread = new MyThread(location, listener);     // does the GET-Request
                 myThread.start();
             }
         };
@@ -241,6 +231,8 @@ public class NewRound extends AppCompatActivity {
 
 
     public static void readJson(StringBuilder content) {        // fills field additionalData  /  gets called by MyThread
+
+
         JSONObject jsonObject = null;
         try {
             jsonObject = new JSONObject(String.valueOf(content));
@@ -277,4 +269,8 @@ public class NewRound extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onReady(StringBuilder content) {
+        readJson(content);
+    }
 }

@@ -2,6 +2,7 @@ package htlgkr.scorebook;
 
 
 import android.location.Location;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,9 +14,12 @@ import java.net.URL;
 public class MyThread extends Thread {
 
     Location location;
-    public MyThread(Location location){
+    public OnDataReadyListener listener;
+    public MyThread(Location location, OnDataReadyListener listener){
         this.location = location;
+        this.listener = listener;
     }
+
 
     public void run(){
 
@@ -42,13 +46,13 @@ public class MyThread extends Thread {
             }
             in.close();
 
-
             con.disconnect();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        NewRound.readJson(content);
+        listener.onReady(content);
+        //NewRound.readJson(content);
     }
 }

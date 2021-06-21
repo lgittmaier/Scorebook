@@ -1,20 +1,26 @@
 package htlgkr.scorebook;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.NumberPicker;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -26,7 +32,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NumberPicker.OnValueChangeListener{
 
     public static ListView lv;
     private static LayoutInflater layoutInflater;
@@ -41,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
 
     private final static String TAG = "MainActivity";
     public final static String PREFS = "PrefsFile";
+
+    public Bundle statsBundle;
 
     private SharedPreferences settings = null;
     private SharedPreferences.Editor editor = null;
@@ -75,8 +83,6 @@ public class MainActivity extends AppCompatActivity {
 
         // register the context menu
         registerForContextMenu(lv);
-
-
         bindViewToAdapter();
     }
 
@@ -202,5 +208,73 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //context menu
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
 
+        getMenuInflater().inflate(R.menu.context_menu, menu);
+        super.onCreateContextMenu(menu, v, menuInfo);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        //show statistics
+        if (item.getItemId() == R.id.showStats) {
+            AdapterView.AdapterContextMenuInfo info =
+                    (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+
+            if (info != null) {
+                int pos = info.position;
+                Round currentRound = (Round) lv.getAdapter().getItem(pos);
+
+                Intent intent = new Intent(getApplicationContext(), Stats.class);  //starts Stats-Acivity
+
+                Bundle bundle = new Bundle();
+                bundle.putString("name", currentRound.getName());
+                bundle.putString("address", currentRound.getAddress());
+                bundle.putString("date", currentRound.getDate());
+                bundle.putString("par", String.valueOf(currentRound.getPar()));
+                bundle.putString("score", String.valueOf(currentRound.getScore()));
+                bundle.putString("over", String.valueOf(currentRound.getScore()-currentRound.getPar()));
+                bundle.putString("putts", String.valueOf(currentRound.getPutts()));
+                bundle.putString("fairway", String.valueOf(currentRound.getFairway()));
+                bundle.putString("gir", String.valueOf(currentRound.getGir()));
+                intent.putExtras(bundle);
+                startActivity(intent);
+
+            }
+            return true;
+
+            //delete round
+        } else if (item.getItemId() == R.id.deleteRound) {
+
+            AdapterView.AdapterContextMenuInfo info =
+                    (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+            if (info != null) {
+                int pos = info.position;
+                Round currentRound = (Round) lv.getAdapter().getItem(pos);
+                rounds.remove(currentRound);
+
+                AlertDialog.Builder alert = new AlertDialog.Builder(this);
+                alert.setTitle("Round at " + currentRound.getName()+ " on "+ currentRound.getDate() + " deleted !");
+                alert.setNegativeButton("ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                alert.show();
+
+            }
+            bindViewToAdapter();
+            return true;
+        }
+        return super.onContextItemSelected(item);
+    }
+
+
+    @Override
+    public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+
+    }
 }
