@@ -5,13 +5,18 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
+import android.Manifest;
 import android.app.NotificationManager;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,10 +28,17 @@ import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -37,6 +49,18 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
     public static ListView lv;
     private static LayoutInflater layoutInflater;
     public static RoundAdapter roundAdapter;
+    private final int RQ_WRITE_SDCARD = 45;
+    private static final int RQ_WRITE_STORAGE = 12345;
+
+    public static final int RQ_ACCESS_PERMISSIONS = 123;
+
+
+    private final String sdCardFilename = "SDCardGolfrunden";
+    public static String json;
+    public static Gson gson = new Gson();
+
+
+
 
 
     public static final String CHANNEL_ID = "notification_channel1";
@@ -45,8 +69,6 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
     private int notificationId = 99;
     public static boolean notificationAllowed;
 
-    private final static String TAG = "MainActivity";
-    public final static String PREFS = "PrefsFile";
 
     public Bundle statsBundle;
 
@@ -162,12 +184,75 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
 
 
             Toast.makeText(this, "show settings", Toast.LENGTH_SHORT).show();
+        }  else if (item.getItemId() == R.id.saveToCSV) {
+
+            if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, RQ_WRITE_SDCARD);
+            } else {
+
+                final ProgressDialog dialog = ProgressDialog.show(this, "save to external storage", "saving", false);
+                new Thread(() -> {
+                    writeToSDCard(rounds);
+                    dialog.dismiss();
+                }).start();
+            }
+
         }
+
 
 
         return super.onOptionsItemSelected(item);
 
     }
+    //SD-card/////////////////////////////////////////////////////////////////////////
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {     // write external storage permission
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == RQ_WRITE_SDCARD) {
+            if (grantResults.length > 0 && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "permission forbidden", Toast.LENGTH_SHORT).show();
+            } else {
+                writeToSDCard(rounds);
+            }
+        }
+    }
+
+    public void writeToSDCard(List<Round> roundList) {
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        String state = Environment.getExternalStorageState();
+
+        //create the path
+        if (!state.equals(Environment.MEDIA_MOUNTED)) return;
+        File outputFile = getExternalFilesDir(null);
+        String path = outputFile.getAbsolutePath();
+        String fullPath = path + File.separator + sdCardFilename;
+        File sdCardNotesFile = new File(fullPath);
+
+        // to Json
+        json = gson.toJson(roundList);
+
+        Log.d("TAG", "filename: " + fullPath);
+        try {
+            PrintWriter pw = new PrintWriter(
+                    new OutputStreamWriter(new FileOutputStream(sdCardNotesFile)));
+
+            pw.write(json);
+
+            pw.flush();
+            pw.close();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
 
 
     //preferences////////////////////////////////////////////////////////////////////////////////////////
