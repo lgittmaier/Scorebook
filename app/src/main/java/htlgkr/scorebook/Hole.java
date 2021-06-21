@@ -158,12 +158,15 @@ public class Hole extends AppCompatActivity {
 
 
 
-                if (!(scoreTv.getText().toString().equals("") || scoreTv.getText() == null)
-                        && !(parTv.getText().toString().equals("") || parTv.getText() == null)
-                        && !(puttsTv.getText().toString().equals("") || puttsTv.getText() == null)) {
+                if (!(scoreTv.getText().toString().equals("") || parTv.getText().toString().equals(""))) {
+
+                    if (puttsTv.getText().toString().equals("")){
+                        putts = 0;
+                    }else{
+                        putts += Integer.parseInt(puttsTv.getText().toString());
+                    }
 
                     par += Integer.parseInt(parTv.getText().toString());
-                    putts += Integer.parseInt(puttsTv.getText().toString());
                     score += Integer.parseInt(scoreTv.getText().toString());
 
                     if (fairwayhitSw.isChecked()){
@@ -213,6 +216,8 @@ public class Hole extends AppCompatActivity {
                     }
 
 
+                }else{
+                    Toast.makeText(getApplicationContext(), "fill all fields!",Toast.LENGTH_LONG).show();
                 }
             }
         });

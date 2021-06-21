@@ -38,8 +38,6 @@ public class NewRound extends AppCompatActivity implements OnDataReadyListener {
 
     private Boolean isGpsAllowed = false;
 
-    private MainActivity mainActivity;
-
     ProgressBar progressBar;
 
     private LocationManager locationManager;
@@ -47,8 +45,6 @@ public class NewRound extends AppCompatActivity implements OnDataReadyListener {
     private RoundAdapter roundAdapter;
     int holeCounter = 1;
 
-
-    private Button startNewRoundButton;
 
     static String additionalData; //address & longitude and latitude
 
@@ -213,7 +209,7 @@ public class NewRound extends AppCompatActivity implements OnDataReadyListener {
         locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(@NonNull Location location) {
-                progressBar.setProgress(40);
+                progressBar.setProgress(60);
                 MyThread myThread = new MyThread(location, listener);     // does the GET-Request
                 myThread.start();
             }

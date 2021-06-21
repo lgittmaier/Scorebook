@@ -48,7 +48,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity implements NumberPicker.OnValueChangeListener{
+public class MainActivity extends AppCompatActivity implements NumberPicker.OnValueChangeListener {
 
     public static ListView lv;
     private static LayoutInflater layoutInflater;
@@ -62,9 +62,6 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
     private final String sdCardFilename = "SDCardGolfrunden";
     public static String json;
     public static Gson gson = new Gson();
-
-
-
 
 
     public static final String CHANNEL_ID = "notification_channel1";
@@ -107,7 +104,6 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
         }
 
 
-
         loadRoundsFromCSV(); // loads rounds from the csv file
 
         // preferences
@@ -121,10 +117,7 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
         prefs2.registerOnSharedPreferenceChangeListener(preferencesChangeListener2);
 
 
-
-
-
-            // register the context menu
+        // register the context menu
         registerForContextMenu(lv);
 
         bindViewToAdapter();
@@ -206,7 +199,7 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
 
 
             Toast.makeText(this, "show settings", Toast.LENGTH_SHORT).show();
-        }  else if (item.getItemId() == R.id.saveToCSV) {
+        } else if (item.getItemId() == R.id.saveToCSV) {
 
             if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, RQ_WRITE_SDCARD);
@@ -220,31 +213,20 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
             }
 
 
-        }
-        else if (item.getItemId() == R.id.clearNotes) {
+        } else if (item.getItemId() == R.id.clearNotes) {
 
-           clearRound();
-            try {
-                FileOutputStream fos = openFileOutput(sdCardFilename, MODE_PRIVATE);
-                PrintWriter out = new PrintWriter(new OutputStreamWriter(fos));
+            clearRound();
 
-                out.println("");
+            writeRoundToCSV(rounds);
 
-                out.flush();
-                out.close();
-            } catch (FileNotFoundException exp) {
-                Log.d("TAG", exp.getStackTrace().toString());
-            }
             bindViewToAdapter();
 
             Toast.makeText(this, "clear", Toast.LENGTH_SHORT).show();
         }
 
-
-
         return super.onOptionsItemSelected(item);
-
     }
+
     //SD-card/////////////////////////////////////////////////////////////////////////
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {     // write external storage permission
@@ -291,9 +273,6 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
             e.printStackTrace();
         }
     }
-
-
-
 
 
     //preferences////////////////////////////////////////////////////////////////////////////////////////
@@ -361,7 +340,7 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
                 bundle.putString("date", currentRound.getDate());
                 bundle.putString("par", String.valueOf(currentRound.getPar()));
                 bundle.putString("score", String.valueOf(currentRound.getScore()));
-                bundle.putString("over", String.valueOf(currentRound.getScore()-currentRound.getPar()));
+                bundle.putString("over", String.valueOf(currentRound.getScore() - currentRound.getPar()));
                 bundle.putString("putts", String.valueOf(currentRound.getPutts()));
                 bundle.putString("fairway", String.valueOf(currentRound.getFairway()));
                 bundle.putString("gir", String.valueOf(currentRound.getGir()));
@@ -382,7 +361,7 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
                 rounds.remove(currentRound);
 
                 AlertDialog.Builder alert = new AlertDialog.Builder(this);
-                alert.setTitle("Round at " + currentRound.getName()+ " on "+ currentRound.getDate() + " deleted !");
+                alert.setTitle("Round at " + currentRound.getName() + " on " + currentRound.getDate() + " deleted !");
                 alert.setNegativeButton("ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -392,10 +371,37 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
                 alert.show();
 
             }
+
+            writeRoundToCSV(rounds);
+
             bindViewToAdapter();
             return true;
         }
         return super.onContextItemSelected(item);
+    }
+
+    public void writeRoundToCSV(List<Round> roundList) {        //writes into CSV-File
+
+        try {
+            FileOutputStream fos = openFileOutput(Hole.filename, MODE_PRIVATE);
+            PrintWriter out = new PrintWriter(new OutputStreamWriter(fos));
+            for (int i = 0; i < roundList.size(); i++) {
+                out.println(roundList.get(i).getName() + ";"
+                        + roundList.get(i).getAddress() + ";"
+                        + roundList.get(i).getDate() + ";"
+                        + roundList.get(i).getPar() + ";"
+                        + roundList.get(i).getScore() + ";"
+                        + roundList.get(i).getOver() + ";"
+                        + roundList.get(i).getPutts() + ";"
+                        + roundList.get(i).getFairway() + ";"
+                        + roundList.get(i).getGir());
+            }
+            out.flush();
+            out.close();
+        } catch (FileNotFoundException exp) {
+            Log.d("TAG", exp.getStackTrace().toString());
+        }
+
     }
 
 
