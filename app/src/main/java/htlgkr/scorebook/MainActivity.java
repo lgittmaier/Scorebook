@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
 import android.Manifest;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -13,6 +14,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
@@ -40,6 +42,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -90,6 +94,20 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
         lv = findViewById(R.id.playedRounds);
         layoutInflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
+        // notification
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = getString(R.string.channel_name);
+            String description = getString(R.string.channel_description);
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+
+            notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+
+
+
         loadRoundsFromCSV(); // loads rounds from the csv file
 
         // preferences
@@ -103,15 +121,19 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
         prefs2.registerOnSharedPreferenceChangeListener(preferencesChangeListener2);
 
 
-        // register the context menu
+
+
+
+            // register the context menu
         registerForContextMenu(lv);
+
         bindViewToAdapter();
     }
 
 
     public void bindViewToAdapter() {
         List<Round> roundList = new ArrayList<>(new HashSet<>(getRounds()));
-
+        Collections.sort(roundList, new Round.SortByDate());
         layoutInflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
         roundAdapter = new RoundAdapter(roundList, layoutInflater);
 
@@ -197,6 +219,25 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
                 }).start();
             }
 
+
+        }
+        else if (item.getItemId() == R.id.clearNotes) {
+
+           clearRound();
+            try {
+                FileOutputStream fos = openFileOutput(sdCardFilename, MODE_PRIVATE);
+                PrintWriter out = new PrintWriter(new OutputStreamWriter(fos));
+
+                out.println("");
+
+                out.flush();
+                out.close();
+            } catch (FileNotFoundException exp) {
+                Log.d("TAG", exp.getStackTrace().toString());
+            }
+            bindViewToAdapter();
+
+            Toast.makeText(this, "clear", Toast.LENGTH_SHORT).show();
         }
 
 
@@ -285,7 +326,7 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
 
                 notificationAllowed = true;
             } else {
-
+                notificationManager.cancelAll();
                 notificationAllowed = false;
             }
 
@@ -362,4 +403,10 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
     public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
 
     }
+
+
+    public static void clearRound() {
+        rounds.clear();
+    }
+
 }

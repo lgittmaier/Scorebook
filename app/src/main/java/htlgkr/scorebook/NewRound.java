@@ -153,7 +153,7 @@ public class NewRound extends AppCompatActivity implements OnDataReadyListener {
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                         calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
                         calendar.set(Calendar.MINUTE, minute);
-                        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                         dateAndTime.setText(sdf.format(calendar.getTime()));
                         tmpCalendar = calendar;
                     }
@@ -298,4 +298,6 @@ public class NewRound extends AppCompatActivity implements OnDataReadyListener {
         progressBar.setProgress(60);
         readJson(content);
     }
+
+
 }
