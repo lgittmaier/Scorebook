@@ -54,17 +54,37 @@
             android:textSize="20sp"
             tools:layout_marginBottom="20dp" />
 
+        <EditText
+            android:id="@+id/holes"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginBottom="10dp"
+
+            android:ems="10"
+            android:hint="holes to play (3/9/18) "
+            android:inputType="textPersonName"
+            android:textSize="20sp"
+            tools:layout_marginBottom="20dp" />
+
         <Button
             android:id="@+id/setLocationBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="150dp"
             android:text="set current location" />
 
+
+        <ProgressBar
+            android:id="@+id/progressbar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_marginBottom="120dp"
+            android:layout_height="wrap_content" />
+
         <Button
-            android:id="@+id/startRoundBtn"
+            android:id="@+id/startRoundBtn_newRound"
             android:layout_width="match_parent"
             android:layout_height="100dp"
+
             android:text="start round" />
 
     </LinearLayout>
