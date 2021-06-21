@@ -260,7 +260,7 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
 
     public void writeToSDCard(List<Round> roundList) {
         try {
-            Thread.sleep(3000);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
