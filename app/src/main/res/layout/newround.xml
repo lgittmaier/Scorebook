@@ -27,6 +27,8 @@
             android:layout_height="60dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="50dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:text="New Round:"
             android:textSize="30sp" />
 
@@ -36,6 +38,8 @@
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_marginBottom="15dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:ems="10"
             android:hint="click to set time and date"
             android:inputType="textPersonName"
@@ -47,7 +51,8 @@
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_marginBottom="10dp"
-
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:ems="10"
             android:hint="name of the golfclub"
             android:inputType="textPersonName"
@@ -59,7 +64,8 @@
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_marginBottom="10dp"
-
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:ems="10"
             android:hint="holes to play  (1 - 18) "
             android:inputType="textPersonName"
@@ -70,7 +76,9 @@
             android:id="@+id/setLocationBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="set current location" />
+            android:text="set current location"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"/>
 
 
         <ProgressBar
@@ -78,13 +86,16 @@
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
             android:layout_marginBottom="120dp"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp" />
 
         <Button
             android:id="@+id/startRoundBtn_newRound"
             android:layout_width="match_parent"
             android:layout_height="100dp"
-
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:text="start round" />
 
     </LinearLayout>
