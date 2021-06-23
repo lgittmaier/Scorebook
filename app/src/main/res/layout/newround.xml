@@ -61,7 +61,7 @@
             android:layout_marginBottom="10dp"
 
             android:ems="10"
-            android:hint="holes to play (3/9/18) "
+            android:hint="holes to play  (1 - 18) "
             android:inputType="textPersonName"
             android:textSize="20sp"
             tools:layout_marginBottom="20dp" />

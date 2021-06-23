@@ -40,7 +40,7 @@
             android:layout_height="wrap_content"
             android:text="Address: "
             android:textSize="27sp"
-            tools:layout_marginBottom="35dp" />
+            tools:layout_marginBottom="30dp" />
 
         <TextView
             android:id="@+id/show_stats_date"
@@ -48,6 +48,7 @@
             android:layout_height="wrap_content"
             android:text="Date: "
             android:textSize="27sp"
+            android:layout_marginTop="10dp"
             tools:layout_marginBottom="20dp" />
 
         <TextView

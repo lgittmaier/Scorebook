@@ -9,81 +9,115 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/holeHeading"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="50dp"
+            android:layout_height="wrap_content"
+            android:paddingBottom="15dp"
+            android:paddingTop="20dp"
             android:text="Hole: n"
             android:textSize="30sp"
-            android:paddingBottom="15dp"/>
+            android:textStyle="bold"
+            android:gravity="center"/>
 
-
-        <EditText
-            android:id="@+id/parTv"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="Par"
-            android:ems="10"
-            android:textSize="30sp"
-            android:paddingBottom="15dp"/>
+            android:layout_gravity="center"
+            android:paddingTop="20dp">
 
-        <EditText
-            android:id="@+id/scoreTv"
-            android:layout_width="match_parent"
+
+            <TextView
+                android:id="@+id/parTv"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="Par"
+                android:textAlignment="center"
+                android:paddingBottom="15dp"
+                android:textSize="30sp" />
+
+            <TextView
+                android:id="@+id/scoreTv"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="Score"
+                android:textAlignment="center"
+                android:paddingBottom="15dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:textSize="30sp" />
+
+            <TextView
+                android:id="@+id/puttsTv"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="Putts"
+                android:textAlignment="center"
+                android:paddingBottom="15dp"
+                android:textSize="30sp" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="Score"
-            android:ems="10"
-            android:textSize="30sp"
-            android:paddingBottom="15dp"/>
+            android:orientation="horizontal"
+            android:layout_gravity="center">
 
-        <EditText
-            android:id="@+id/puttsTv"
-            android:layout_width="match_parent"
+            <NumberPicker
+                android:id="@+id/numberPickerPar"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                />
+            <NumberPicker
+                android:id="@+id/numberPickerScore"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                />
+            <NumberPicker
+                android:id="@+id/numberPickerPutts"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="Putts"
-            android:ems="10"
-            android:textSize="30sp"
-            android:paddingBottom="15dp" />
+            android:orientation="vertical"
+            android:layout_marginTop="30dp"
+            android:layout_gravity="center">
 
+            <Switch
+                android:id="@+id/fairwayhitSw"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Fairway hit"
+                android:paddingBottom="15dp"
+                android:textSize="30sp" />
 
-        <Switch
-            android:id="@+id/fairwayhitSw"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Fairway hit"
-            android:ems="10"
-            android:textSize="30sp"
-            android:paddingBottom="15dp"/>
+            <Switch
 
-        <Switch
+                android:id="@+id/greenhitSw"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Green in Regulation"
+                android:paddingBottom="90dp"
+                android:textSize="30sp" />
 
-            android:id="@+id/greenhitSw"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Green in Regulation"
-            android:paddingBottom="90dp"
-            android:ems="10"
-            android:textSize="30sp"/>
-
-        <Button
-            android:id="@+id/nextHoleBtn"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:text="Next" />
-
+            <Button
+                android:id="@+id/nextHoleBtn"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:text="Next" />
+        </LinearLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
