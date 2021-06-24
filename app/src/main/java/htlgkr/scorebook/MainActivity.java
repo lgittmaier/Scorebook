@@ -48,37 +48,29 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity implements NumberPicker.OnValueChangeListener {
+public class MainActivity extends AppCompatActivity {
+
+    static List<Round> rounds = new ArrayList<>();
 
     public static ListView lv;
     private static LayoutInflater layoutInflater;
     public static RoundAdapter roundAdapter;
     private final int RQ_WRITE_SDCARD = 45;
-    private static final int RQ_WRITE_STORAGE = 12345;
 
-    public static final int RQ_ACCESS_PERMISSIONS = 123;
-
-
-    private final String sdCardFilename = "SDCardGolfrunden";
+    private final String sdCardFilename = "SDCardFile";
     public static String json;
     public static Gson gson = new Gson();
 
-
     public static final String CHANNEL_ID = "notification_channel1";
-    public static List<Integer> notifications = new ArrayList<>();
     private NotificationManager notificationManager;
     private int notificationId = 99;
     public static boolean notificationAllowed;
-
-
-    public Bundle statsBundle;
 
     private SharedPreferences settings = null;
     private SharedPreferences.Editor editor = null;
 
     private SharedPreferences prefs1;
     private SharedPreferences prefs2;
-    private SharedPreferences prefs3;
     private SharedPreferences.OnSharedPreferenceChangeListener preferencesChangeListener1;
     private SharedPreferences.OnSharedPreferenceChangeListener preferencesChangeListener2;
 
@@ -124,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
     }
 
 
-    public void bindViewToAdapter() {
+    public void bindViewToAdapter() {  // refreshes the ListView
         List<Round> roundList = new ArrayList<>(new HashSet<>(getRounds()));
         Collections.sort(roundList, new Round.SortByDate());
         layoutInflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -135,7 +127,6 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
 
     public void loadRoundsFromCSV() {
         rounds.clear();
-        List<Round> toDos = new ArrayList<>();
         try {
             FileInputStream fis = openFileInput(Hole.filename);
 
@@ -145,27 +136,20 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
             while ((line = in.readLine()) != null) {
                 String[] tmp = line.split(";");
                 Round r = null;
-
-
                 if (tmp[0] == null || tmp[0].equals("") || tmp[0].equals(" ") || tmp[1] == null || tmp[1].equals("") || tmp[1].equals(" ")) {
-
                 } else {
                     r = new Round(tmp[0], tmp[1], tmp[2], Integer.parseInt(tmp[3]), Integer.parseInt(tmp[4]),
                             Integer.parseInt(tmp[5]), Integer.parseInt(tmp[6]), Integer.parseInt(tmp[7]), Integer.parseInt(tmp[8]));
                     addRound(r);
                 }
-
-
             }
             in.close();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
-    static List<Round> rounds = new ArrayList<>();
 
     public static List<Round> getRounds() {
         return rounds;
@@ -211,8 +195,6 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
                     dialog.dismiss();
                 }).start();
             }
-
-
         } else if (item.getItemId() == R.id.clearNotes) {
 
             clearRound();
@@ -293,7 +275,6 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
             }
 
-
         } else if (key.equals("allowNotifications")) {
             if (allEntries.get(key) instanceof String) {
                 sValue = prefs.getString(key, "");
@@ -308,12 +289,10 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
                 notificationManager.cancelAll();
                 notificationAllowed = false;
             }
-
-
         }
     }
 
-    //context menu
+    //context menu//////////////////////////////////////////////////////////////////////////
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
 
@@ -369,7 +348,6 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
                     }
                 });
                 alert.show();
-
             }
 
             writeRoundToCSV(rounds);
@@ -380,7 +358,7 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
         return super.onContextItemSelected(item);
     }
 
-    public void writeRoundToCSV(List<Round> roundList) {        //writes into CSV-File
+    public void writeRoundToCSV(List<Round> roundList) {        //writes into CSV-File to save rounds
 
         try {
             FileOutputStream fos = openFileOutput(Hole.filename, MODE_PRIVATE);
@@ -403,13 +381,6 @@ public class MainActivity extends AppCompatActivity implements NumberPicker.OnVa
         }
 
     }
-
-
-    @Override
-    public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-
-    }
-
 
     public static void clearRound() {
         rounds.clear();
