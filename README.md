@@ -1,9 +1,10 @@
 # Scorebook
 In der App Scorebook kann man seine Golfrunde dokumentieren und auswerten lassen.
 
-Mein erstellt eine neue Runde und kann dann all seine Daten eingeben.
+Man erstellt eine neue Runde und kann dann all seine Daten eingeben.
 Nach einem gespielten Loch kann man die Anzahl der benötigten Schläge und Putts eingeben.
-Daraus werden nach der Runde verschiedene Statistiken errechnet und werden gespeichert.
+Daraus werden nach der Runde verschiedene Statistiken berechnet und werden gespeichert.
+
 
 Features:	GPS (aktueller Standpunkt), 
 		Scorecard (aktuelle Runde), 
