@@ -54,6 +54,5 @@ public class MyThread extends Thread {
         }
 
         listener.onReady(content);
-        //NewRound.readJson(content);
     }
 }

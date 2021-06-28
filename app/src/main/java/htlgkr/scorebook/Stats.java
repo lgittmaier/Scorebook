@@ -10,8 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class Stats extends AppCompatActivity {
 
-    TextView tv_gcName, tv_address, tv_date, tv_par, tv_score, tv_over, tv_fairways, tv_putts, tv_gir, heading, ba;
-    TextView et_gcName, et_address, et_date, et_par, et_score, et_over, et_fairways, et_putts, et_gir;
+    TextView tv_gcName, tv_address, tv_date, tv_par, tv_score, tv_over, tv_fairways, tv_putts, tv_gir;
     private LayoutInflater layoutInflater;
 
     @Override

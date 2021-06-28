@@ -182,15 +182,8 @@ public class NewRound extends AppCompatActivity implements OnDataReadyListener {
         String coarseLocationPermission = Manifest.permission.ACCESS_COARSE_LOCATION;
         String networkPermission = Manifest.permission.ACCESS_NETWORK_STATE;
 
-        //if (ActivityCompat.checkSelfPermission(this, locationPermission)
-        //      != PackageManager.PERMISSION_GRANTED) {
-
         ActivityCompat.requestPermissions(this, new String[]{locationPermission, networkPermission, coarseLocationPermission}, RQ_ACCESS_PERMISSIONS);
-        //} else {
-
         gpsGranted();
-
-        //}
     }
 
     @SuppressLint("MissingPermission")
