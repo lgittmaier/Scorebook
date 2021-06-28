@@ -131,9 +131,6 @@ public class Hole extends AppCompatActivity {
     }
 
     public void clearHole() {
-        scoreTv.setText("");
-        parTv.setText("");
-        puttsTv.setText("");
         scorePicker.setValue(1);
         parPicker.setValue(3);
         puttsPicker.setValue(0);
