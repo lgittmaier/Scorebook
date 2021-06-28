@@ -134,6 +134,9 @@ public class Hole extends AppCompatActivity {
         scoreTv.setText("");
         parTv.setText("");
         puttsTv.setText("");
+        scorePicker.setValue(1);
+        parPicker.setValue(3);
+        puttsPicker.setValue(0);
         greenhitSw.setChecked(false);
         fairwayhitSw.setChecked(false);
     }
